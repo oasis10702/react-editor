@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+// Import React dependencies.
+import React, { useEffect, useMemo, useState } from "react";
+import { createEditor } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [value, setValue] = useState([
+    {
+      type: "paragraph",
+      children: [{ text: "A line of text in a paragraph." }],
+    },
+  ]);
+  const editor = useMemo(() => withReact(createEditor()), []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={(newValue) => setValue(newValue)}
+      >
+        <Editable />
+      </Slate>
     </div>
   );
-}
+};
 
 export default App;
