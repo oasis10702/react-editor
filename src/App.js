@@ -1,5 +1,5 @@
 // Import React dependencies.
-import React, {  useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { createEditor, Transforms, Editor, Text } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import "./App.css";
@@ -13,9 +13,8 @@ const App = () => {
   ]);
   const editor = useMemo(() => withReact(createEditor()), []);
 
-  // 基于传递的 props 定义一个渲染函数。
-  // 我们在这里使用 useCallback 在随后的渲染中记住这个函数。
   const renderElement = useCallback((props) => {
+    console.log(props);
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />;
@@ -24,7 +23,6 @@ const App = () => {
     }
   }, []);
 
-  // 通过 useCallback 定义一个可以记忆的渲染叶子节点的函数
   const renderLeaf = useCallback((props) => {
     return <Leaf {...props} />;
   }, []);
@@ -38,38 +36,21 @@ const App = () => {
       >
         <Editable
           renderElement={renderElement}
-             // 传递渲染叶子节点函数
-        renderLeaf={renderLeaf}
+          renderLeaf={renderLeaf}
           onKeyDown={(event) => {
             if (!event.ctrlKey) {
               return;
             }
-
             switch (event.key) {
-              // 当按下 "`" ，保留我们代码块存在的逻辑
               case "`": {
                 event.preventDefault();
-                const [match] = Editor.nodes(editor, {
-                  match: (n) => n.type === "code",
-                });
-                Transforms.setNodes(
-                  editor,
-                  { type: match ? "paragraph" : "code" },
-                  { match: (n) => Editor.isBlock(editor, n) }
-                );
+                CustomEditor.toggleCodeBlock(editor);
                 break;
               }
 
-              // 当按下 "B" ，加粗所选择的文本
               case "b": {
                 event.preventDefault();
-                Transforms.setNodes(
-                  editor,
-                  { bold: true },
-                  // 应用到文本节点上，
-                  // 如果所选内容仅仅是全部文本的一部分，则拆分它们。
-                  { match: (n) => Text.isText(n), split: true }
-                );
+                CustomEditor.toggleBoldMark(editor);
                 break;
               }
               default:
@@ -82,7 +63,6 @@ const App = () => {
   );
 };
 
-// 为 code 节点定义一个 React 组件渲染器
 const CodeElement = (props) => {
   return (
     <pre {...props.attributes}>
@@ -105,6 +85,44 @@ const Leaf = (props) => {
       {props.children}
     </span>
   );
+};
+
+// Define our own custom set of helpers.
+const CustomEditor = {
+  isBoldMarkActive(editor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => n.bold === true,
+      universal: true,
+    });
+
+    return !!match;
+  },
+
+  isCodeBlockActive(editor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => n.type === "code",
+    });
+
+    return !!match;
+  },
+
+  toggleBoldMark(editor) {
+    const isActive = CustomEditor.isBoldMarkActive(editor);
+    Transforms.setNodes(
+      editor,
+      { bold: isActive ? null : true },
+      { match: (n) => Text.isText(n), split: true }
+    );
+  },
+
+  toggleCodeBlock(editor) {
+    const isActive = CustomEditor.isCodeBlockActive(editor);
+    Transforms.setNodes(
+      editor,
+      { type: isActive ? null : "code" },
+      { match: (n) => Editor.isBlock(editor, n) }
+    );
+  },
 };
 
 export default App;
