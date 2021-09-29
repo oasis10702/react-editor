@@ -2,7 +2,15 @@
 import React, { useMemo, useState, useCallback } from "react"
 import { createEditor, Transforms, Editor, Text } from "slate"
 import { Slate, Editable, withReact } from "slate-react"
+import type { BaseEditor } from "slate"
+import type { ReactEditor } from "slate-react"
 import "./App.css"
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor
+  }
+}
 
 const App = () => {
   const [value, setValue] = useState([
