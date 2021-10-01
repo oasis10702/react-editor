@@ -2,23 +2,17 @@
 import React, { useMemo, useState, useCallback } from "react"
 import { createEditor, Transforms, Editor, Text } from "slate"
 import { Slate, Editable, withReact } from "slate-react"
-import type { BaseEditor } from "slate"
-import type { ReactEditor } from "slate-react"
 import "./App.css"
 
-declare module "slate" {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor
-  }
-}
+const initialValue = [
+  {
+    type: "paragraph",
+    children: [{ text: "A line of text in a paragraph." }],
+  },
+]
 
 const App = () => {
-  const [value, setValue] = useState([
-    {
-      type: "paragraph",
-      children: [{ text: "A line of text in a paragraph." }],
-    },
-  ])
+  const [value, setValue] = useState(initialValue)
   const editor = useMemo(() => withReact(createEditor()), [])
 
   const renderElement = useCallback((props) => {
