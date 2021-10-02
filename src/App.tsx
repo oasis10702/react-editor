@@ -16,7 +16,6 @@ const App = () => {
   const editor = useMemo(() => withReact(createEditor()), [])
 
   const renderElement = useCallback((props) => {
-    console.log(props)
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />
