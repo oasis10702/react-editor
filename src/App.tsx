@@ -1,8 +1,10 @@
 // Import React dependencies.
 import React, { useMemo, useState, useCallback } from "react"
-import { createEditor, Transforms, Editor, Text } from "slate"
+import { createEditor } from "slate"
 import { Slate, Editable, withReact } from "slate-react"
 import type { Descendant } from "slate"
+import type { RenderElementProps, RenderLeafProps } from "slate-react"
+import { EditorCommands } from "./commands"
 import "./App.css"
 
 const initialValue: Descendant[] = [
@@ -46,13 +48,13 @@ const App = () => {
             switch (event.key) {
               case "`": {
                 event.preventDefault()
-                CustomEditor.toggleCodeBlock(editor)
+                EditorCommands.toggleCodeBlock(editor)
                 break
               }
 
               case "b": {
                 event.preventDefault()
-                CustomEditor.toggleBoldMark(editor)
+                EditorCommands.toggleBoldMark(editor)
                 break
               }
               default:
@@ -65,7 +67,7 @@ const App = () => {
   )
 }
 
-const CodeElement = (props) => {
+const CodeElement = (props: RenderElementProps) => {
   return (
     <pre {...props.attributes}>
       <code>{props.children}</code>
@@ -73,12 +75,12 @@ const CodeElement = (props) => {
   )
 }
 
-const DefaultElement = (props) => {
+const DefaultElement = (props: RenderElementProps) => {
   return <p {...props.attributes}>{props.children}</p>
 }
 
 // Define a React component to render leaves with bold text.
-const Leaf = (props) => {
+const Leaf = (props: RenderLeafProps) => {
   return (
     <span
       {...props.attributes}
@@ -87,44 +89,6 @@ const Leaf = (props) => {
       {props.children}
     </span>
   )
-}
-
-// Define our own custom set of helpers.
-const CustomEditor = {
-  isBoldMarkActive(editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.bold === true,
-      universal: true,
-    })
-
-    return !!match
-  },
-
-  isCodeBlockActive(editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "code",
-    })
-
-    return !!match
-  },
-
-  toggleBoldMark(editor) {
-    const isActive = CustomEditor.isBoldMarkActive(editor)
-    Transforms.setNodes(
-      editor,
-      { bold: isActive ? undefined : true },
-      { match: (n) => Text.isText(n), split: true }
-    )
-  },
-
-  toggleCodeBlock(editor) {
-    const isActive = CustomEditor.isCodeBlockActive(editor)
-    Transforms.setNodes(
-      editor,
-      { type: isActive ? undefined : "code" },
-      { match: (n) => Editor.isBlock(editor, n) }
-    )
-  },
 }
 
 export default App
