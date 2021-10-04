@@ -2,9 +2,10 @@
 import React, { useMemo, useState, useCallback } from "react"
 import { createEditor, Transforms, Editor, Text } from "slate"
 import { Slate, Editable, withReact } from "slate-react"
+import type { Descendant } from "slate"
 import "./App.css"
 
-const initialValue = [
+const initialValue: Descendant[] = [
   {
     type: "paragraph",
     children: [{ text: "A line of text in a paragraph." }],
@@ -111,7 +112,7 @@ const CustomEditor = {
     const isActive = CustomEditor.isBoldMarkActive(editor)
     Transforms.setNodes(
       editor,
-      { bold: isActive ? null : true },
+      { bold: isActive ? undefined : true },
       { match: (n) => Text.isText(n), split: true }
     )
   },
@@ -120,7 +121,7 @@ const CustomEditor = {
     const isActive = CustomEditor.isCodeBlockActive(editor)
     Transforms.setNodes(
       editor,
-      { type: isActive ? null : "code" },
+      { type: isActive ? undefined : "code" },
       { match: (n) => Editor.isBlock(editor, n) }
     )
   },
