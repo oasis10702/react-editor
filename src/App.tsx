@@ -7,7 +7,9 @@ import type { RenderElementProps, RenderLeafProps } from "slate-react"
 import { EditorCommands } from "./commands"
 import "./App.css"
 
-const initialValue: Descendant[] = [
+const initialValue: Descendant[] = JSON.parse(
+  localStorage.getItem("content") as string
+) || [
   {
     type: "paragraph",
     children: [{ text: "A line of text in a paragraph." }],
@@ -36,7 +38,12 @@ const App = () => {
       <Slate
         editor={editor}
         value={value}
-        onChange={(newValue) => setValue(newValue)}
+        onChange={(newValue) => {
+          setValue(newValue)
+          const content = JSON.stringify(newValue)
+          console.log(content)
+          localStorage.setItem("content", content)
+        }}
       >
         <Editable
           renderElement={renderElement}
