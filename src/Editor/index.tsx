@@ -4,6 +4,8 @@ import { Slate, Editable, withReact } from "slate-react"
 import type { Descendant } from "slate"
 import type { RenderElementProps, RenderLeafProps } from "slate-react"
 import { EditorCommands } from "./commands"
+import { EditorToolbar } from "../components/EditorToolbar"
+import { css } from "@emotion/css"
 
 const initialValue: Descendant[] = JSON.parse(
   localStorage.getItem("content") as string
@@ -31,40 +33,45 @@ export const Editor = () => {
     return <Leaf {...props} />
   }, [])
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={(newValue) => {
-        setValue(newValue)
-        const content = JSON.stringify(newValue)
-        localStorage.setItem("content", content)
-      }}
-    >
-      <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        onKeyDown={(event) => {
-          if (!event.ctrlKey) {
-            return
-          }
-          switch (event.key) {
-            case "`": {
-              event.preventDefault()
-              EditorCommands.toggleCodeBlock(editor)
-              break
-            }
+    <div className={baseStyle}>
+      <EditorToolbar />
+      <div className={editorWrapperStyle}>
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue)
+            const content = JSON.stringify(newValue)
+            localStorage.setItem("content", content)
+          }}
+        >
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            onKeyDown={(event) => {
+              if (!event.ctrlKey) {
+                return
+              }
+              switch (event.key) {
+                case "`": {
+                  event.preventDefault()
+                  EditorCommands.toggleCodeBlock(editor)
+                  break
+                }
 
-            case "b": {
-              event.preventDefault()
-              EditorCommands.toggleBoldMark(editor)
-              break
-            }
-            default:
-              break
-          }
-        }}
-      />
-    </Slate>
+                case "b": {
+                  event.preventDefault()
+                  EditorCommands.toggleBoldMark(editor)
+                  break
+                }
+                default:
+                  break
+              }
+            }}
+          />
+        </Slate>
+      </div>
+    </div>
   )
 }
 
@@ -91,3 +98,10 @@ const Leaf = (props: RenderLeafProps) => {
     </span>
   )
 }
+
+const baseStyle = css`
+  width: 100%;
+`
+const editorWrapperStyle = css`
+  padding: 0 16px;
+`
