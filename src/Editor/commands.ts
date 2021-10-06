@@ -12,6 +12,24 @@ export const EditorCommands = {
     return !!match
   },
 
+  isItalicMarkActive(editor: CustomEditor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => Text.isText(n) && n.italic === true,
+      universal: true,
+    })
+
+    return !!match
+  },
+
+  isUnderlinedMarkActive(editor: CustomEditor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => Text.isText(n) && n.underlined === true,
+      universal: true,
+    })
+
+    return !!match
+  },
+
   isCodeBlockActive(editor: CustomEditor) {
     const [match] = Editor.nodes(editor, {
       match: (n) => Element.isElement(n) && n.type === "code",
@@ -25,6 +43,24 @@ export const EditorCommands = {
     Transforms.setNodes(
       editor,
       { bold: isActive ? undefined : true },
+      { match: (n) => Text.isText(n), split: true }
+    )
+  },
+
+  toggleItalicMark(editor: CustomEditor) {
+    const isActive = EditorCommands.isItalicMarkActive(editor)
+    Transforms.setNodes(
+      editor,
+      { italic: isActive ? undefined : true },
+      { match: (n) => Text.isText(n), split: true }
+    )
+  },
+
+  toggleUnderlinedMark(editor: CustomEditor) {
+    const isActive = EditorCommands.isUnderlinedMarkActive(editor)
+    Transforms.setNodes(
+      editor,
+      { underlined: isActive ? undefined : true },
       { match: (n) => Text.isText(n), split: true }
     )
   },

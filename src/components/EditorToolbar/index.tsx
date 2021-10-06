@@ -21,10 +21,22 @@ type Props = {
 
 export const EditorToolbar = ({ editorValue }: Props) => {
   const editor = useContext(EditorContext)
-  console.log(editorValue)
+
   const handleFormatBold = useCallback(() => {
     if (editor) {
       EditorCommands.toggleBoldMark(editor)
+    }
+  }, [editor])
+
+  const handleFormatItalic = useCallback(() => {
+    if (editor) {
+      EditorCommands.toggleItalicMark(editor)
+    }
+  }, [editor])
+
+  const handleFormatUnderlined = useCallback(() => {
+    if (editor) {
+      EditorCommands.toggleUnderlinedMark(editor)
     }
   }, [editor])
 
@@ -38,10 +50,12 @@ export const EditorToolbar = ({ editorValue }: Props) => {
               children:
                 value.type === "paragraph"
                   ? value.children?.map(
-                      ({ text, bold }) =>
+                      ({ text, bold, italic, underlined }) =>
                         new TextRun({
                           text,
                           bold,
+                          italics: italic,
+                          underline: underlined,
                         })
                     )
                   : undefined,
@@ -70,10 +84,10 @@ export const EditorToolbar = ({ editorValue }: Props) => {
           <IconButton color="inherit" onClick={handleFormatBold}>
             <FormatBold />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleFormatItalic}>
             <FormatItalic />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleFormatUnderlined}>
             <FormatUnderlined />
           </IconButton>
           <IconButton color="inherit" onClick={handleDownloadDocx}>

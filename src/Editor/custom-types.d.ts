@@ -23,7 +23,13 @@ export type CodeElement = {
 
 export type CustomElement = ParagraphElement | HeadingElement | CodeElement
 
-export type FormattedText = { type: "text"; text: string; bold?: true }
+export type FormattedText = {
+  type: "text"
+  text: string
+  bold?: boolean
+  italic?: boolean
+  underlined?: boolean
+}
 
 export type CustomText = FormattedText
 
