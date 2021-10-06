@@ -11,7 +11,7 @@ import {
   FormatUnderlined,
 } from "@mui/icons-material"
 import { EditorCommands } from "../../Editor/commands"
-import { Document, Packer, Paragraph, TextRun } from "docx"
+import { Document, Packer, Paragraph, TextRun, UnderlineType } from "docx"
 import { saveAs } from "file-saver"
 import type { Descendant } from "slate"
 
@@ -55,7 +55,11 @@ export const EditorToolbar = ({ editorValue }: Props) => {
                           text,
                           bold,
                           italics: italic,
-                          underline: underlined,
+                          underline: {
+                            type: underlined
+                              ? ("single" as UnderlineType)
+                              : undefined,
+                          },
                         })
                     )
                   : undefined,
