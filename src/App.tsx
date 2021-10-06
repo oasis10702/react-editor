@@ -1,12 +1,19 @@
-import React from "react"
+import { useMemo } from "react"
 import { Editor } from "./Editor"
+import { createEditor } from "slate"
+import { withReact } from "slate-react"
+import { EditorContext } from "./contexts"
 import "./App.css"
 
 const App = () => {
+  const editor = useMemo(() => withReact(createEditor()), [])
+
   return (
-    <div className="App">
-      <Editor />
-    </div>
+    <EditorContext.Provider value={editor}>
+      <div className="App">
+        <Editor />
+      </div>
+    </EditorContext.Provider>
   )
 }
 
