@@ -32,9 +32,10 @@ export const Editor = () => {
   const renderLeaf = useCallback((props) => {
     return <Leaf {...props} />
   }, [])
+
   return (
     <div className={baseStyle}>
-      <EditorToolbar />
+      <EditorToolbar editorValue={value} />
       <div className={editorWrapperStyle}>
         {editor ? (
           <Slate

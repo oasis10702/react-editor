@@ -1,8 +1,9 @@
 // This example is for an Editor with `ReactEditor` and `HistoryEditor`
-import { BaseEditor } from "slate"
-import { ReactEditor } from "slate-react"
+import type { BaseEditor } from "slate"
+import type { ReactEditor } from "slate-react"
+import type { HistoryEditor } from "slate-history"
 
-export type CustomEditor = BaseEditor & ReactEditor
+export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor
 
 export type ParagraphElement = {
   type: "paragraph"
@@ -22,7 +23,7 @@ export type CodeElement = {
 
 export type CustomElement = ParagraphElement | HeadingElement | CodeElement
 
-export type FormattedText = { text: string; bold?: true }
+export type FormattedText = { type: "text"; text: string; bold?: true }
 
 export type CustomText = FormattedText
 
