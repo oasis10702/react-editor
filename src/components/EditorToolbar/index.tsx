@@ -55,11 +55,9 @@ export const EditorToolbar = ({ editorValue }: Props) => {
                           text,
                           bold,
                           italics: italic,
-                          underline: {
-                            type: underlined
-                              ? ("single" as UnderlineType)
-                              : undefined,
-                          },
+                          underline: underlined
+                            ? { type: "single" as UnderlineType }
+                            : undefined,
                         })
                     )
                   : undefined,
