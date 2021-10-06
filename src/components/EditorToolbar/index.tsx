@@ -69,7 +69,6 @@ export const EditorToolbar = ({ editorValue }: Props) => {
   )
 
   const handleDownloadDocx = useCallback(() => {
-    console.log(sections)
     const doc = new Document({
       sections,
     })
