@@ -8,6 +8,8 @@ import {
   Download,
   FormatBold,
   FormatItalic,
+  FormatListBulleted,
+  FormatListNumbered,
   FormatUnderlined,
 } from "@mui/icons-material"
 import { EditorCommands } from "../../Editor/commands"
@@ -90,6 +92,12 @@ export const EditorToolbar = ({ editorValue }: Props) => {
           </IconButton>
           <IconButton color="inherit" onClick={handleFormatUnderlined}>
             <FormatUnderlined />
+          </IconButton>
+          <IconButton color="inherit">
+            <FormatListBulleted />
+          </IconButton>
+          <IconButton color="inherit">
+            <FormatListNumbered />
           </IconButton>
           <IconButton color="inherit" onClick={handleDownloadDocx}>
             <Download />
