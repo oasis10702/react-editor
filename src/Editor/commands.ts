@@ -73,4 +73,10 @@ export const EditorCommands = {
       { match: (n) => Editor.isBlock(editor, n) }
     )
   },
+
+  toggleBlock(editor: CustomEditor) {
+    // TODO: Implement list toggle command
+  },
 }
+
+const LIST_TYPE = []

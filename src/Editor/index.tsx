@@ -24,6 +24,10 @@ export const Editor = () => {
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />
+      case "bulletedList":
+        return <ul {...props.attributes}>{props.children}</ul>
+      case "numberedList":
+        return <ol {...props.attributes}>{props.children}</ol>
       default:
         return <DefaultElement {...props} />
     }
