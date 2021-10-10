@@ -78,5 +78,3 @@ export const EditorCommands = {
     // TODO: Implement list toggle command
   },
 }
-
-const LIST_TYPE = []
