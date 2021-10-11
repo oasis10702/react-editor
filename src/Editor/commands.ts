@@ -1,3 +1,4 @@
+import { isList } from "immutable"
 import { Transforms, Editor, Text, Element } from "slate"
 import type { CustomEditor } from "./custom-types"
 
@@ -33,6 +34,14 @@ export const EditorCommands = {
   isCodeBlockActive(editor: CustomEditor) {
     const [match] = Editor.nodes(editor, {
       match: (n) => Element.isElement(n) && n.type === "code",
+    })
+
+    return !!match
+  },
+
+  isBulletedListActive(editor: CustomEditor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => Element.isElement(n) && n.type === "bulletedList",
     })
 
     return !!match
@@ -74,7 +83,24 @@ export const EditorCommands = {
     )
   },
 
-  toggleBlock(editor: CustomEditor) {
-    // TODO: Implement list toggle command
+  toggleBulletedListBlock(editor: CustomEditor) {
+    const isActive = EditorCommands.isBulletedListActive(editor)
+
+    Transforms.unwrapNodes(editor, {
+      match: (n) =>
+        !Editor.isEditor(n) &&
+        Element.isElement(n) &&
+        ["bulletedList"].includes(n.type),
+      split: true,
+    })
+
+    Transforms.setNodes(editor, {
+      type: isActive ? "paragraph" : "listItem",
+    })
+
+    if (!isActive) {
+      const block = { type: "bulletedList", children: [] }
+      Transforms.wrapNodes(editor, block)
+    }
   },
 }

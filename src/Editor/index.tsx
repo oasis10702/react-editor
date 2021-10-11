@@ -28,6 +28,8 @@ export const Editor = () => {
         return <ul {...props.attributes}>{props.children}</ul>
       case "numberedList":
         return <ol {...props.attributes}>{props.children}</ol>
+      case "listItem":
+        return <li {...props.attributes}>{props.children}</li>
       default:
         return <DefaultElement {...props} />
     }

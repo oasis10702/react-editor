@@ -42,6 +42,12 @@ export const EditorToolbar = ({ editorValue }: Props) => {
     }
   }, [editor])
 
+  const handleFormatBulletedList = useCallback(() => {
+    if (editor) {
+      EditorCommands.toggleBulletedListBlock(editor)
+    }
+  }, [editor])
+
   const sections = useMemo(
     () => [
       {
@@ -93,7 +99,7 @@ export const EditorToolbar = ({ editorValue }: Props) => {
           <IconButton color="inherit" onClick={handleFormatUnderlined}>
             <FormatUnderlined />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleFormatBulletedList}>
             <FormatListBulleted />
           </IconButton>
           <IconButton color="inherit">
